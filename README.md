@@ -38,7 +38,7 @@ O projeto será iniciado em http://localhost:3000
 ## Funcionalidades atuais
 
 - Dashboard com 3 métricas principais em tempo real
-- Indicadores visuais por cor — verde para positivo, vermelho para alerta
+- Indicadores visuais por cor verde para positivo, vermelho para alerta
 - Interface responsiva e profissional
 
 ## Próximas etapas
