@@ -10,10 +10,10 @@ function KanbanColumn({ stage, leads, onMoveStage, onDelete }) {
   const total = leads.reduce((sum, l) => sum + (l.valor || 0), 0);
 
   return (
-    <div className="flex flex-col bg-gray-900/60 rounded-2xl p-3 min-w-[260px] w-[260px] shrink-0">
+    <div className="flex flex-col bg-gray-900/60 rounded-2xl p-3 min-w-[260px] w-[260px] shrink-0 border border-white/5">
       <div className={`flex items-center justify-between mb-3 pb-3 border-b ${colors.headerBorder}`}>
         <div className="flex items-center gap-2">
-          <span className={`w-2 h-2 rounded-full ${colors.dot}`} />
+          <span className={`w-2 h-2 rounded-full ${colors.dot} ${colors.dotGlow}`} />
           <h3 className="text-sm font-semibold text-gray-200">{stage.label}</h3>
         </div>
         <span className={`text-xs px-2 py-0.5 rounded-full border ${colors.badge}`}>{leads.length}</span>
