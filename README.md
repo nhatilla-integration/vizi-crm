@@ -2,6 +2,8 @@
 
 🔗 **Demo ao vivo:** [vizi-crm.vercel.app](https://vizi-crm.vercel.app)
 
+![Demonstração do Vizi CRM](docs/demo.gif)
+
 Vizi CRM é uma aplicação desenvolvida para atuar como uma camada analítica e organizacional, auxiliando empresas na tomada de decisões estratégicas e operacionais.
 
 A plataforma funciona como uma "peneira inteligente", analisando os dados do processo comercial para identificar padrões, gargalos e oportunidades de melhoria. O objetivo é ajudar empresas a entenderem quais ações estão gerando resultados e quais processos precisam ser ajustados.
