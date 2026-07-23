@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react';
 import MetricCard from './components/MetricCard';
 import KanbanColumn from './components/KanbanColumn';
 import NewLeadModal from './components/NewLeadModal';
-import LupaWatermark from './components/LupaWatermark';
 import { useLeads } from './hooks/useLeads';
 import { STAGES } from './data/stages';
 
@@ -30,7 +29,6 @@ function App() {
     <div className="relative min-h-screen bg-gray-950 overflow-hidden flex flex-col items-center pt-12 pb-16 px-4">
       <div className="pointer-events-none absolute -top-40 -left-40 w-[420px] h-[420px] bg-cyan-500/20 rounded-full blur-[120px] z-0" />
       <div className="pointer-events-none absolute -top-20 -right-40 w-[420px] h-[420px] bg-fuchsia-500/20 rounded-full blur-[120px] z-0" />
-      <LupaWatermark />
 
       <div className="relative z-10 flex flex-col items-center">
         <h1 className="text-6xl font-extrabold tracking-widest mb-2 bg-gradient-to-r from-cyan-300 via-blue-400 to-fuchsia-400 bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(99,179,237,0.35)]">
