@@ -48,8 +48,18 @@ Editor do Supabase.
 
 ## Próximas etapas
 
+**Produto**
 * Sistema de autenticação por login e senha
 * Módulo analítico de campanhas
+
+**Técnico / qualidade**
+* Confirmação antes de excluir um lead (hoje apaga direto no clique)
+* Cobertura de testes no `useLeads` (fallback pro modo demo, criação, troca de etapa)
+* CI no GitHub Actions rodando testes e build a cada push
+* Feedback visível pro usuário quando a conexão com o Supabase falha
+
+**Segurança** (antes de conectar dados reais)
+* Trocar a policy aberta do Supabase (`supabase_setup.sql`) por regras baseadas em `auth.uid()`, assim que a autenticação for implementada
 
 ## Autora
 
