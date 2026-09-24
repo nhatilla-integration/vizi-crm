@@ -1,22 +1,37 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import MetricCard from './components/MetricCard';
 import KanbanColumn from './components/KanbanColumn';
 import LeadFormModal from './components/LeadFormModal';
 import Logo from './components/Logo';
 import LandingPage from './components/LandingPage';
 import LoginScreen from './components/LoginScreen';
+import { useAuth } from './hooks/useAuth';
 import { useLeads } from './hooks/useLeads';
 import { STAGES } from './data/stages';
 
 function App() {
-  const { leads, loading, isDemoMode, createLead, updateLead, moveStage, deleteLead } = useLeads();
+  const { session, authLoading, signIn, signOut } = useAuth();
+  const { leads, loading, isDemoMode, error, clearError, createLead, updateLead, moveStage, deleteLead } = useLeads(session);
   const [formState, setFormState] = useState({ open: false, lead: null });
   const [view, setView] = useState('landing');
   const [authMode, setAuthMode] = useState('login');
 
+  // Se já existe uma sessão ativa (ex: usuário atualizou a página depois de
+  // logar), pula a landing/login e vai direto pro funil.
+  useEffect(() => {
+    if (!authLoading && session) {
+      setView('app');
+    }
+  }, [authLoading, session]);
+
   function goToAuth(mode) {
     setAuthMode(mode);
     setView('login');
+  }
+
+  async function handleSignOut() {
+    await signOut();
+    setView('landing');
   }
 
   function openCreateForm() {
@@ -55,6 +70,14 @@ function App() {
     return grouped;
   }, [leads]);
 
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-[#F4F6F9] flex items-center justify-center">
+        <p className="text-slate-400 text-sm">Carregando...</p>
+      </div>
+    );
+  }
+
   if (view === 'landing') {
     return (
       <LandingPage
@@ -66,7 +89,14 @@ function App() {
   }
 
   if (view === 'login') {
-    return <LoginScreen mode={authMode} onLogin={() => setView('app')} onBack={() => setView('landing')} />;
+    return (
+      <LoginScreen
+        mode={authMode}
+        onLogin={() => setView('app')}
+        onLoginSubmit={signIn}
+        onBack={() => setView('landing')}
+      />
+    );
   }
 
   return (
@@ -84,10 +114,10 @@ function App() {
           <div className="flex items-center gap-3">
             {isDemoMode && !loading && (
               <span className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-3 py-1">
-                Modo demonstração: conecte o Supabase para dados reais
+                Modo demonstração — dados de exemplo, não estão sendo salvos
               </span>
             )}
-            <button onClick={() => setView('landing')} className="text-sm font-medium text-slate-500 hover:text-brand-blueDark">
+            <button onClick={handleSignOut} className="text-sm font-medium text-slate-500 hover:text-brand-blueDark">
               Sair
             </button>
           </div>
@@ -95,6 +125,13 @@ function App() {
       </header>
 
       <main className="relative z-10 max-w-7xl mx-auto px-6 py-8">
+        {error && (
+          <div className="mb-4 flex items-center justify-between gap-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-2.5">
+            <span>{error}</span>
+            <button onClick={clearError} className="text-red-400 hover:text-red-600 shrink-0" aria-label="Fechar aviso">✕</button>
+          </div>
+        )}
+
         <div className="flex gap-4 mb-8 flex-wrap">
           <MetricCard label="Orçamentos Solicitados" value={metrics.orcamentosSolicitados} accent="blue" />
           <MetricCard label="Orçamentos Encaminhados" value={metrics.orcamentosEncaminhados} accent="green" />

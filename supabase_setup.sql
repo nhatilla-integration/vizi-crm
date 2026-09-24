@@ -21,19 +21,23 @@ create table if not exists leads (
 -- Habilita Row Level Security (recomendado mesmo em projetos pessoais)
 alter table leads enable row level security;
 
--- Política simples: permite leitura e escrita pública via chave anônima.
--- Suficiente para o estágio atual do projeto (sem login ainda).
--- Quando a autenticação for implementada, troque por políticas baseadas em auth.uid().
-create policy "Permitir tudo via anon key"
+-- Política: só usuários autenticados (login real) podem ler/escrever.
+-- Não existe cadastro público no app — as contas são criadas manualmente
+-- pelo administrador em Supabase Dashboard > Authentication > Users > Add user.
+-- Como só existem contas criadas à mão, "estar logado" já é suficiente pra
+-- proteger os dados de quem não deveria ter acesso.
+create policy "Permitir tudo para usuarios autenticados"
   on leads
   for all
-  using (true)
-  with check (true);
+  using (auth.uid() is not null)
+  with check (auth.uid() is not null);
 
 -- Habilita realtime (atualização automática na tela quando os dados mudam)
 alter publication supabase_realtime add table leads;
 
--- Dados de exemplo (opcional — remova se quiser começar zerado)
+-- Dados de exemplo (OPCIONAL — pule esse insert se o objetivo é usar com
+-- dados reais de um negócio de verdade, pra não misturar leads falsos com
+-- os de verdade).
 insert into leads (nome, origem, etapa, valor) values
   ('Aura Estética', 'Instagram', 'novo', 1800),
   ('MariDecor', 'Indicação', 'em_contato', 3200),
