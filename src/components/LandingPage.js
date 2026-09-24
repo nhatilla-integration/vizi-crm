@@ -256,7 +256,6 @@ function LandingPage({ onLogin, onSignup, onPreview }) {
             Ver o funil em ação
           </button>
         </div>
-        <p className="text-xs text-slate-400 mt-4">Grátis por 30 dias · sem cartão de crédito</p>
       </header>
 
       <section className="bg-[#F4F6F9] py-16">

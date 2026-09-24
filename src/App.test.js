@@ -33,7 +33,7 @@ test('"Experimente grátis" mostra o formulário de cadastro completo', async ()
 
   userEvent.click(screen.getAllByRole('button', { name: /experimente grátis/i })[0]);
 
-  expect(await screen.findByRole('heading', { name: /comece seu teste grátis/i })).toBeInTheDocument();
+  expect(await screen.findByRole('heading', { name: /comece a usar o vizi/i })).toBeInTheDocument();
   expect(screen.getByText(/nome completo/i)).toBeInTheDocument();
   expect(screen.getByText(/nome da empresa/i)).toBeInTheDocument();
 });

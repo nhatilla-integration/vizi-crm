@@ -42,13 +42,8 @@ function LoginScreen({ mode = 'login', onLogin, onLoginSubmit, onBack }) {
       </button>
 
       <div className="bg-white rounded-xl p-8 w-full max-w-sm border border-slate-200 shadow-sm">
-        {isSignup && (
-          <span className="inline-block text-[10px] font-bold uppercase tracking-wide text-brand-orange bg-orange-50 border border-orange-200 rounded-full px-2 py-0.5 mb-4">
-            Grátis por 30 dias · sem cartão de crédito
-          </span>
-        )}
         <h1 className="text-xl font-bold text-brand-blueDark mb-1">
-          {isSignup ? 'Comece seu teste grátis' : 'Entrar no Vizi'}
+          {isSignup ? 'Comece a usar o Vizi' : 'Entrar no Vizi'}
         </h1>
         <p className="text-sm text-slate-500 mb-6">
           {isSignup ? 'Sem compromisso. Você decide depois se quer continuar.' : 'Acesse seu funil de leads.'}
