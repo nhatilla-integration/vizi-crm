@@ -45,15 +45,22 @@ conectar a um banco real, copie `.env.example` para `.env`, preencha com as
 chaves do seu projeto Supabase e rode o script `supabase_setup.sql` no SQL
 Editor do Supabase.
 
+Não existe cadastro público de contas reais: quem acessa o funil de verdade
+precisa de uma conta criada manualmente no Supabase Dashboard
+(Authentication > Users > Add user). Isso é proposital — evita que qualquer
+visitante do site crie conta e veja os dados reais de outra pessoa.
+
 ## Funcionalidades atuais
 
 * Landing page de apresentação, com proposta de valor, "Como funciona" e funcionalidades
-* Três formas de entrar: ver o funil direto (sem cadastro), criar conta (formulário completo, "grátis por 30 dias") ou entrar com login — hoje esse fluxo é só visual, ainda sem autenticação real
+* Três formas de entrar: ver o funil direto em modo demonstração (sem cadastro), criar conta (formulário completo, "grátis por 30 dias" — hoje só visual, cai em modo demo) ou entrar com login real (Supabase Auth, para contas criadas manualmente)
 * Dashboard com 3 métricas principais em tempo real (orçamentos solicitados, orçamentos encaminhados, mensagens paradas)
 * Funil de leads em formato Kanban, com etapas do processo comercial (Novo, Em contato, Orçamento Enviado, Fechado, Perdido)
 * Cadastro, edição (nome, origem, valor, telefone, tags, notas), movimentação entre etapas e remoção (com confirmação) de leads
-* Integração com Supabase, incluindo atualização em tempo real (realtime)
-* Modo de demonstração com dados de exemplo, para uso sem conexão configurada
+* Integração com Supabase, incluindo atualização em tempo real (realtime) e autenticação
+* Acesso aos dados reais protegido por login — RLS no banco só libera leitura/escrita pra quem está autenticado
+* Aviso visível quando uma operação no Supabase falha (falha de rede, permissão, etc.)
+* Modo de demonstração com dados de exemplo, para quem só quer olhar sem logar
 * Interface responsiva, clara e corporativa
 * CI no GitHub Actions rodando testes e build a cada push
 * Hospedado na Vercel
@@ -61,16 +68,13 @@ Editor do Supabase.
 ## Próximas etapas
 
 **Produto**
-* Autenticação real (hoje o cadastro/login da landing page é só visual)
+* Cadastro público (hoje "Experimente grátis" só mostra o modo demo — criar conta de verdade continua manual, pelo Supabase Dashboard)
 * Assistente de métricas que explica em linguagem simples por que uma campanha vendeu bem ou mal
 * Conexão com WhatsApp pra puxar atendimentos pendentes automaticamente
 * Painel de resultados/benefícios pra quem estiver testando o Vizi
 
 **Técnico / qualidade**
-* Feedback visível pro usuário quando a conexão com o Supabase falha
-
-**Segurança** (antes de conectar dados reais)
-* Trocar a policy aberta do Supabase (`supabase_setup.sql`) por regras baseadas em `auth.uid()`, assim que a autenticação for implementada
+* Isolar dados por usuário (hoje quem está autenticado vê a mesma tabela — funciona bem para um único negócio piloto, mas não escala pra múltiplos clientes sem uma coluna de dono + política por `auth.uid()`)
 
 ## Autora
 

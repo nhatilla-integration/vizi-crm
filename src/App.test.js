@@ -8,7 +8,7 @@ test('landing page mostra a proposta do produto e o CTA principal', () => {
   expect(screen.getAllByRole('button', { name: /experimente grátis/i }).length).toBeGreaterThan(0);
 });
 
-test('fluxo landing -> login -> app chega no funil de leads', async () => {
+test('login real mostra erro quando o Supabase não está configurado', async () => {
   render(<App />);
 
   userEvent.click(screen.getAllByRole('button', { name: 'Entrar' })[0]);
@@ -16,8 +16,7 @@ test('fluxo landing -> login -> app chega no funil de leads', async () => {
 
   userEvent.click(screen.getByRole('button', { name: 'Entrar' }));
 
-  expect(await screen.findByRole('heading', { name: 'ViZi' })).toBeInTheDocument();
-  expect(screen.getByText(/\+ Novo lead/i)).toBeInTheDocument();
+  expect(await screen.findByText(/supabase não está configurado/i)).toBeInTheDocument();
 });
 
 test('"Ver o funil em ação" pula direto pro app, sem passar por login', async () => {

@@ -3,7 +3,7 @@ import Logo from './Logo';
 
 const FUNCOES = ['Dono(a) do negócio', 'Vendas / Atendimento', 'Marketing', 'Outro'];
 
-function LoginScreen({ mode = 'login', onLogin, onBack }) {
+function LoginScreen({ mode = 'login', onLogin, onLoginSubmit, onBack }) {
   const isSignup = mode === 'signup';
 
   const [nome, setNome] = useState('');
@@ -11,10 +11,27 @@ function LoginScreen({ mode = 'login', onLogin, onBack }) {
   const [funcao, setFuncao] = useState(FUNCOES[0]);
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    onLogin();
+    setErrorMsg('');
+
+    if (isSignup) {
+      onLogin();
+      return;
+    }
+
+    setSubmitting(true);
+    const { error } = await onLoginSubmit(email, senha);
+    setSubmitting(false);
+
+    if (error) {
+      setErrorMsg(error);
+    } else {
+      onLogin();
+    }
   }
 
   return (
@@ -101,17 +118,24 @@ function LoginScreen({ mode = 'login', onLogin, onBack }) {
             />
           </div>
 
+          {errorMsg && (
+            <p className="text-xs text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{errorMsg}</p>
+          )}
+
           <button
             type="submit"
-            className="mt-2 bg-brand-orange hover:bg-brand-orangeDark transition-colors text-white text-sm font-semibold rounded-lg py-2.5 shadow-sm"
+            disabled={submitting}
+            className="mt-2 bg-brand-orange hover:bg-brand-orangeDark transition-colors text-white text-sm font-semibold rounded-lg py-2.5 shadow-sm disabled:opacity-60"
           >
-            {isSignup ? 'Criar minha conta' : 'Entrar'}
+            {submitting ? 'Entrando...' : isSignup ? 'Criar minha conta' : 'Entrar'}
           </button>
         </form>
 
-        <p className="text-xs text-slate-400 text-center mt-5">
-          Esse formulário ainda é só visual. Ao continuar você acessa o modo demonstração.
-        </p>
+        {isSignup && (
+          <p className="text-xs text-slate-400 text-center mt-5">
+            Esse cadastro ainda é só visual. Ao continuar você acessa o modo demonstração.
+          </p>
+        )}
       </div>
     </div>
   );
