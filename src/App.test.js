@@ -1,14 +1,40 @@
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import App from './App';
 
-test('renders o titulo ViZi', () => {
+test('landing page mostra a proposta do produto e o CTA principal', () => {
   render(<App />);
-  const titleElement = screen.getByRole('heading', { name: 'ViZi' });
-  expect(titleElement).toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: /mensagem esquecida no whatsapp/i })).toBeInTheDocument();
+  expect(screen.getAllByRole('button', { name: /experimente grátis/i }).length).toBeGreaterThan(0);
 });
 
-test('renders o botao de novo lead', () => {
+test('fluxo landing -> login -> app chega no funil de leads', async () => {
   render(<App />);
-  const buttonElement = screen.getByText(/\+ Novo lead/i);
-  expect(buttonElement).toBeInTheDocument();
+
+  userEvent.click(screen.getAllByRole('button', { name: 'Entrar' })[0]);
+  expect(await screen.findByRole('heading', { name: /entrar no vizi/i })).toBeInTheDocument();
+
+  userEvent.click(screen.getByRole('button', { name: 'Entrar' }));
+
+  expect(await screen.findByRole('heading', { name: 'ViZi' })).toBeInTheDocument();
+  expect(screen.getByText(/\+ Novo lead/i)).toBeInTheDocument();
+});
+
+test('"Ver o funil em ação" pula direto pro app, sem passar por login', async () => {
+  render(<App />);
+
+  userEvent.click(screen.getByRole('button', { name: /ver o funil em ação/i }));
+
+  expect(await screen.findByRole('heading', { name: 'ViZi' })).toBeInTheDocument();
+  expect(screen.getByText(/\+ Novo lead/i)).toBeInTheDocument();
+});
+
+test('"Experimente grátis" mostra o formulário de cadastro completo', async () => {
+  render(<App />);
+
+  userEvent.click(screen.getAllByRole('button', { name: /experimente grátis/i })[0]);
+
+  expect(await screen.findByRole('heading', { name: /comece seu teste grátis/i })).toBeInTheDocument();
+  expect(screen.getByText(/nome completo/i)).toBeInTheDocument();
+  expect(screen.getByText(/nome da empresa/i)).toBeInTheDocument();
 });

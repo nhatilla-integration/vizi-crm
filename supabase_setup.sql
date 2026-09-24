@@ -7,8 +7,16 @@ create table if not exists leads (
   origem text not null default 'Outro',
   etapa text not null default 'novo' check (etapa in ('novo', 'em_contato', 'orcamento', 'fechado', 'perdido')),
   valor numeric default 0,
+  telefone text default '',
+  tags text[] default '{}',
+  notas text default '',
   created_at timestamp with time zone default now()
 );
+
+-- Se a tabela já existia antes destas colunas serem adicionadas, rode também:
+-- alter table leads add column if not exists telefone text default '';
+-- alter table leads add column if not exists tags text[] default '{}';
+-- alter table leads add column if not exists notas text default '';
 
 -- Habilita Row Level Security (recomendado mesmo em projetos pessoais)
 alter table leads enable row level security;

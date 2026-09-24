@@ -76,6 +76,16 @@ export function useLeads() {
     if (error) console.error('Erro ao mover etapa:', error.message);
   }
 
+  async function updateLead(id, updates) {
+    if (isDemoMode) {
+      setLeads((prev) => prev.map((l) => (l.id === id ? { ...l, ...updates } : l)));
+      return;
+    }
+
+    const { error } = await supabase.from('leads').update(updates).eq('id', id);
+    if (error) console.error('Erro ao atualizar lead:', error.message);
+  }
+
   async function deleteLead(id) {
     if (isDemoMode) {
       setLeads((prev) => prev.filter((l) => l.id !== id));
@@ -86,5 +96,5 @@ export function useLeads() {
     if (error) console.error('Erro ao remover lead:', error.message);
   }
 
-  return { leads, loading, isDemoMode, createLead, moveStage, deleteLead };
+  return { leads, loading, isDemoMode, createLead, updateLead, moveStage, deleteLead };
 }
