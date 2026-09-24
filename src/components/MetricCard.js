@@ -1,34 +1,19 @@
 const ACCENTS = {
-  cyan: {
-    value: 'text-cyan-300',
-    ring: 'border-cyan-400/30',
-    glow: 'shadow-[0_0_25px_-8px_rgba(34,211,238,0.7)]',
-    bar: 'from-cyan-400 to-blue-500',
-  },
-  emerald: {
-    value: 'text-emerald-300',
-    ring: 'border-emerald-400/30',
-    glow: 'shadow-[0_0_25px_-8px_rgba(52,211,153,0.7)]',
-    bar: 'from-emerald-400 to-cyan-400',
-  },
-  rose: {
-    value: 'text-rose-300',
-    ring: 'border-rose-400/30',
-    glow: 'shadow-[0_0_25px_-8px_rgba(251,113,133,0.7)]',
-    bar: 'from-rose-400 to-fuchsia-500',
-  },
+  blue: { bar: 'bg-brand-blue', value: 'text-brand-blue', tint: 'bg-blue-50/60' },
+  green: { bar: 'bg-green-500', value: 'text-green-600', tint: 'bg-green-50/60' },
+  red: { bar: 'bg-red-500', value: 'text-red-600', tint: 'bg-red-50/60' },
 };
 
-function MetricCard({ label, value, accent = 'cyan' }) {
+function MetricCard({ label, value, accent = 'blue' }) {
   const colors = ACCENTS[accent];
 
   return (
-    <div
-      className={`relative overflow-hidden bg-gray-900/80 rounded-2xl p-8 w-56 text-center border ${colors.ring} ${colors.glow}`}
-    >
-      <span className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${colors.bar}`} />
-      <h2 className="text-gray-400 text-sm uppercase tracking-wider mb-4">{label}</h2>
-      <p className={`text-5xl font-bold ${colors.value}`}>{value}</p>
+    <div className={`flex items-stretch rounded-xl w-64 border border-slate-200 shadow-sm overflow-hidden ${colors.tint}`}>
+      <span className={`w-2 shrink-0 ${colors.bar}`} />
+      <div className="p-5 text-left">
+        <h2 className="text-slate-500 text-xs uppercase tracking-wider font-semibold mb-2">{label}</h2>
+        <p className={`text-4xl font-extrabold ${colors.value}`}>{value}</p>
+      </div>
     </div>
   );
 }

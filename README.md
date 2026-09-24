@@ -2,7 +2,17 @@
 
 🔗 **Demo ao vivo:** [vizi-crm.vercel.app](https://vizi-crm.vercel.app)
 
-![Demonstração do Vizi CRM](docs/demo.gif)
+## Antes e depois
+
+O visual do Vizi passou por um redesign completo — de um tema neon escuro pra um
+visual claro e corporativo, com landing page própria e mais funcionalidades no funil.
+
+**Antes** — tema neon escuro, funil simples
+![Antes: Vizi CRM em tema neon](docs/demo.gif)
+
+**Depois** — visual claro corporativo, landing page, cadastro completo e mais campos no lead
+![Depois: novo layout do Vizi CRM](docs/vizi-layout-novo-1.gif)
+![Depois: novo layout do Vizi CRM, parte 2](docs/vizi-layout-novo-2.gif)
 
 Vizi CRM é uma aplicação desenvolvida para atuar como uma camada analítica e organizacional, auxiliando empresas na tomada de decisões estratégicas e operacionais.
 
@@ -37,25 +47,26 @@ Editor do Supabase.
 
 ## Funcionalidades atuais
 
-* Dashboard com 3 métricas principais em tempo real (orçamentos solicitados, orçamentos encaminhados, paradas)
-* Indicadores visuais por cor — verde para positivo, vermelho para alerta
+* Landing page de apresentação, com proposta de valor, "Como funciona" e funcionalidades
+* Três formas de entrar: ver o funil direto (sem cadastro), criar conta (formulário completo, "grátis por 30 dias") ou entrar com login — hoje esse fluxo é só visual, ainda sem autenticação real
+* Dashboard com 3 métricas principais em tempo real (orçamentos solicitados, orçamentos encaminhados, mensagens paradas)
 * Funil de leads em formato Kanban, com etapas do processo comercial (Novo, Em contato, Orçamento Enviado, Fechado, Perdido)
-* Cadastro, movimentação entre etapas e remoção de leads diretamente pelo funil
+* Cadastro, edição (nome, origem, valor, telefone, tags, notas), movimentação entre etapas e remoção (com confirmação) de leads
 * Integração com Supabase, incluindo atualização em tempo real (realtime)
 * Modo de demonstração com dados de exemplo, para uso sem conexão configurada
-* Interface responsiva e profissional
+* Interface responsiva, clara e corporativa
+* CI no GitHub Actions rodando testes e build a cada push
 * Hospedado na Vercel
 
 ## Próximas etapas
 
 **Produto**
-* Sistema de autenticação por login e senha
-* Módulo analítico de campanhas
+* Autenticação real (hoje o cadastro/login da landing page é só visual)
+* Assistente de métricas que explica em linguagem simples por que uma campanha vendeu bem ou mal
+* Conexão com WhatsApp pra puxar atendimentos pendentes automaticamente
+* Painel de resultados/benefícios pra quem estiver testando o Vizi
 
 **Técnico / qualidade**
-* Confirmação antes de excluir um lead (hoje apaga direto no clique)
-* Cobertura de testes no `useLeads` (fallback pro modo demo, criação, troca de etapa)
-* CI no GitHub Actions rodando testes e build a cada push
 * Feedback visível pro usuário quando a conexão com o Supabase falha
 
 **Segurança** (antes de conectar dados reais)
