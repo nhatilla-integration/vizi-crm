@@ -53,7 +53,7 @@ visitante do site crie conta e veja os dados reais de outra pessoa.
 ## Funcionalidades atuais
 
 * Landing page de apresentação, com proposta de valor, "Como funciona" e funcionalidades
-* Três formas de entrar: ver o funil direto em modo demonstração (sem cadastro), criar conta (formulário completo, "grátis por 30 dias" — hoje só visual, cai em modo demo) ou entrar com login real (Supabase Auth, para contas criadas manualmente)
+* Três formas de entrar: ver o funil direto em modo demonstração (sem cadastro), criar conta (formulário completo — hoje só visual, cai em modo demo) ou entrar com login real (Supabase Auth, para contas criadas manualmente)
 * Dashboard com 3 métricas principais em tempo real (orçamentos solicitados, orçamentos encaminhados, mensagens paradas)
 * Funil de leads em formato Kanban, com etapas do processo comercial (Novo, Em contato, Orçamento Enviado, Fechado, Perdido)
 * Cadastro, edição (nome, origem, valor, telefone, tags, notas), movimentação entre etapas e remoção (com confirmação) de leads
