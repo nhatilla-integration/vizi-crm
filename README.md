@@ -29,7 +29,8 @@ Empresas que recebem alto volume de leads frequentemente perdem visibilidade sob
 * Tailwind CSS
 * HTML5
 * CSS3
-* Supabase (banco de dados e realtime)
+* Supabase (banco de dados, autenticação e realtime)
+* Vercel Functions + API da Anthropic (Claude), para o assistente de métricas
 
 ## Como executar o projeto
 
@@ -41,9 +42,10 @@ npm start
 O projeto será iniciado em http://localhost:3000
 
 Por padrão, o app roda em **modo demonstração** (dados locais de exemplo). Para
-conectar a um banco real, copie `.env.example` para `.env`, preencha com as
-chaves do seu projeto Supabase e rode o script `supabase_setup.sql` no SQL
-Editor do Supabase.
+conectar a um banco real, copie `.env.example` para `.env.local` (esse nome é
+importante — é o único ignorado pelo Git, então suas chaves não vão parar no
+GitHub), preencha com as chaves do seu projeto Supabase e rode o script
+`supabase_setup.sql` no SQL Editor do Supabase.
 
 Não existe cadastro público de contas reais: quem acessa o funil de verdade
 precisa de uma conta criada manualmente no Supabase Dashboard
@@ -61,6 +63,7 @@ visitante do site crie conta e veja os dados reais de outra pessoa.
 * Acesso aos dados reais protegido por login — RLS no banco só libera leitura/escrita pra quem está autenticado
 * Aviso visível quando uma operação no Supabase falha (falha de rede, permissão, etc.)
 * Modo de demonstração com dados de exemplo, para quem só quer olhar sem logar
+* **Assistente de métricas**: pergunte sobre o funil em português simples e receba uma resposta gerada por IA (Claude), com base só em números agregados — nunca nome, telefone ou notas de lead nenhum
 * Interface responsiva, clara e corporativa
 * CI no GitHub Actions rodando testes e build a cada push
 * Hospedado na Vercel
@@ -69,8 +72,7 @@ visitante do site crie conta e veja os dados reais de outra pessoa.
 
 **Produto**
 * Cadastro público (hoje "Experimente grátis" só mostra o modo demo — criar conta de verdade continua manual, pelo Supabase Dashboard)
-* Assistente de métricas que explica em linguagem simples por que uma campanha vendeu bem ou mal
-* Conexão com WhatsApp pra puxar atendimentos pendentes automaticamente
+* Conexão com WhatsApp pra puxar atendimentos pendentes automaticamente (hoje o atendimento é registrado manualmente no funil)
 * Painel de resultados/benefícios pra quem estiver testando o Vizi
 
 **Técnico / qualidade**
