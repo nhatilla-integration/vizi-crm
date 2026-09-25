@@ -5,7 +5,6 @@ import LeadFormModal from './components/LeadFormModal';
 import Logo from './components/Logo';
 import LandingPage from './components/LandingPage';
 import LoginScreen from './components/LoginScreen';
-import MetricsAssistant from './components/MetricsAssistant';
 import { useAuth } from './hooks/useAuth';
 import { useLeads } from './hooks/useLeads';
 import { STAGES } from './data/stages';
@@ -138,8 +137,6 @@ function App() {
           <MetricCard label="Orçamentos Encaminhados" value={metrics.orcamentosEncaminhados} accent="green" />
           <MetricCard label="Mensagens Paradas" value={metrics.mensagensParadas} accent="red" />
         </div>
-
-        <MetricsAssistant leads={leads} />
 
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-slate-700 text-sm uppercase tracking-wider font-semibold">Funil de Leads</h2>

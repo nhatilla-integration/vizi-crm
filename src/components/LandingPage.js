@@ -163,7 +163,7 @@ const FEATURES = [
   {
     title: 'Assistente de métricas',
     description: 'Pergunte por que uma campanha vendeu bem e outra não. A resposta vem em linguagem simples, sem jargão.',
-    status: null,
+    status: 'Em breve',
     mockup: 'assistente',
   },
   {
