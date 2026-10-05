@@ -1,6 +1,6 @@
 # Vizi CRM
 
-🔗 **Demo ao vivo:** [vizi-crm.vercel.app](https://vizi-crm.vercel.app)
+🔗 **Demo ao vivo:** [vizicrm.com.br](https://vizicrm.com.br)
 
 ## Antes e depois
 
