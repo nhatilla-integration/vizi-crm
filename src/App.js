@@ -139,7 +139,7 @@ function App() {
           <MetricCard label="Mensagens Paradas" value={metrics.mensagensParadas} accent="red" />
         </div>
 
-        <MetricsAssistant leads={leads} />
+        <MetricsAssistant leads={leads} token={session?.access_token} />
 
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-slate-700 text-sm uppercase tracking-wider font-semibold">Funil de Leads</h2>

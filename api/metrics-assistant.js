@@ -1,3 +1,7 @@
+import { createClient } from '@supabase/supabase-js';
+
+const LIMITE_PERGUNTAS_POR_DIA = 20;
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Método não permitido.' });
@@ -5,8 +9,44 @@ export default async function handler(req, res) {
   }
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) {
-    res.status(500).json({ error: 'Assistente ainda não configurado (falta a chave da API).' });
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
+
+  if (!apiKey || !supabaseUrl || !supabaseAnonKey) {
+    res.status(500).json({ error: 'Assistente ainda não configurado neste ambiente.' });
+    return;
+  }
+
+  const authHeader = req.headers.authorization || '';
+  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
+  if (!token) {
+    res.status(401).json({ error: 'Não autenticado.' });
+    return;
+  }
+
+  // Cliente com a chave anon, mas autenticado como o próprio usuário (token
+  // dele no header) — nunca service_role. Toda leitura/escrita abaixo passa
+  // pela RLS de metrics_assistant_usos, igual aconteceria vindo do navegador.
+  const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+    global: { headers: { Authorization: `Bearer ${token}` } },
+  });
+
+  const { data: userData, error: userError } = await supabase.auth.getUser(token);
+  if (userError || !userData?.user) {
+    res.status(401).json({ error: 'Sessão inválida ou expirada. Atualize a página e entre de novo.' });
+    return;
+  }
+  const userId = userData.user.id;
+
+  const desde = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+  const { count, error: countError } = await supabase
+    .from('metrics_assistant_usos')
+    .select('*', { count: 'exact', head: true })
+    .eq('user_id', userId)
+    .gte('criado_em', desde);
+
+  if (!countError && count >= LIMITE_PERGUNTAS_POR_DIA) {
+    res.status(429).json({ error: 'Você atingiu o limite de perguntas por hoje. Tente de novo amanhã.' });
     return;
   }
 
@@ -50,6 +90,11 @@ ${JSON.stringify(summary)}`;
 
     const data = await response.json();
     const answer = data.content?.[0]?.text ?? 'Não consegui gerar uma resposta.';
+
+    // Não bloqueia a resposta se o log falhar — só registra o problema.
+    const { error: logError } = await supabase.from('metrics_assistant_usos').insert({ user_id: userId });
+    if (logError) console.error('Erro ao registrar uso do assistente:', logError.message);
+
     res.status(200).json({ answer });
   } catch (err) {
     console.error('Erro ao chamar o assistente de métricas:', err.message);

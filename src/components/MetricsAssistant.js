@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { buildFunnelSummary } from '../lib/funnelSummary';
 
-function MetricsAssistant({ leads }) {
+function MetricsAssistant({ leads, token }) {
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
   const [error, setError] = useState('');
@@ -15,10 +15,16 @@ function MetricsAssistant({ leads }) {
     setError('');
     setAnswer('');
 
+    if (!token) {
+      setError('Sua sessão expirou. Atualize a página e entre de novo.');
+      setLoading(false);
+      return;
+    }
+
     try {
       const res = await fetch('/api/metrics-assistant', {
         method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json', authorization: `Bearer ${token}` },
         body: JSON.stringify({ question, summary: buildFunnelSummary(leads) }),
       });
 

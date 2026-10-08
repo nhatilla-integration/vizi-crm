@@ -18,7 +18,7 @@ describe('MetricsAssistant', () => {
       json: async () => ({ answer: 'A maioria dos leads vem do Instagram.' }),
     });
 
-    render(<MetricsAssistant leads={leads} />);
+    render(<MetricsAssistant leads={leads} token="token-de-teste" />);
 
     userEvent.type(screen.getByPlaceholderText(/por que/i), 'de onde vêm meus leads?');
     userEvent.click(screen.getByRole('button', { name: /perguntar/i }));
@@ -26,7 +26,10 @@ describe('MetricsAssistant', () => {
     expect(await screen.findByText(/a maioria dos leads vem do instagram/i)).toBeInTheDocument();
     expect(global.fetch).toHaveBeenCalledWith(
       '/api/metrics-assistant',
-      expect.objectContaining({ method: 'POST' })
+      expect.objectContaining({
+        method: 'POST',
+        headers: expect.objectContaining({ authorization: 'Bearer token-de-teste' }),
+      })
     );
   });
 
@@ -36,11 +39,23 @@ describe('MetricsAssistant', () => {
       json: async () => ({ error: 'Não consegui responder agora.' }),
     });
 
-    render(<MetricsAssistant leads={leads} />);
+    render(<MetricsAssistant leads={leads} token="token-de-teste" />);
 
     userEvent.type(screen.getByPlaceholderText(/por que/i), 'de onde vêm meus leads?');
     userEvent.click(screen.getByRole('button', { name: /perguntar/i }));
 
     expect(await screen.findByText(/não consegui responder agora/i)).toBeInTheDocument();
+  });
+
+  test('não chama a API e avisa quando não há sessão (sem token)', async () => {
+    global.fetch = jest.fn();
+
+    render(<MetricsAssistant leads={leads} />);
+
+    userEvent.type(screen.getByPlaceholderText(/por que/i), 'de onde vêm meus leads?');
+    userEvent.click(screen.getByRole('button', { name: /perguntar/i }));
+
+    expect(await screen.findByText(/sua sessão expirou/i)).toBeInTheDocument();
+    expect(global.fetch).not.toHaveBeenCalled();
   });
 });
