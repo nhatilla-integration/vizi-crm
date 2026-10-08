@@ -5,13 +5,23 @@ import LeadFormModal from './components/LeadFormModal';
 import Logo from './components/Logo';
 import LandingPage from './components/LandingPage';
 import LoginScreen from './components/LoginScreen';
+import ResetPasswordScreen from './components/ResetPasswordScreen';
 import MetricsAssistant from './components/MetricsAssistant';
 import { useAuth } from './hooks/useAuth';
 import { useLeads } from './hooks/useLeads';
 import { STAGES } from './data/stages';
 
 function App() {
-  const { session, authLoading, signIn, signOut } = useAuth();
+  const {
+    session,
+    authLoading,
+    passwordRecovery,
+    signIn,
+    signUp,
+    resetPasswordForEmail,
+    updatePassword,
+    signOut,
+  } = useAuth();
   const { leads, loading, isDemoMode, error, clearError, createLead, updateLead, moveStage, deleteLead } = useLeads(session);
   const [formState, setFormState] = useState({ open: false, lead: null });
   const [view, setView] = useState('landing');
@@ -79,6 +89,13 @@ function App() {
     );
   }
 
+  // Prioridade sobre qualquer outra view: a pessoa chegou aqui pelo link de
+  // "esqueci minha senha" do e-mail (evento PASSWORD_RECOVERY), então tem
+  // que definir a nova senha antes de qualquer outra coisa.
+  if (passwordRecovery) {
+    return <ResetPasswordScreen onUpdatePassword={updatePassword} />;
+  }
+
   if (view === 'landing') {
     return (
       <LandingPage
@@ -95,6 +112,9 @@ function App() {
         mode={authMode}
         onLogin={() => setView('app')}
         onLoginSubmit={signIn}
+        onSignupSubmit={signUp}
+        onForgotSubmit={resetPasswordForEmail}
+        onModeChange={setAuthMode}
         onBack={() => setView('landing')}
       />
     );
